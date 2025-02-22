@@ -1,13 +1,11 @@
-# Use an OpenJDK base image
-FROM openjdk:17-jdk-slim
-
-RUN apt-get update && apt-get install -y maven
-
+FROM eclipse-temurin:17-jdk-focal
+ 
 WORKDIR /app
-COPY pom.xml . 
-COPY src /app/src
-
-RUN mvn clean install -DskipTests 
-EXPOSE 8080
-
-CMD ["java", "-jar", "target/bci-api-0.0.1-SNAPSHOT.jar"]
+ 
+COPY .mvn/ .mvn
+COPY mvnw pom.xml ./
+RUN ./mvnw dependency:go-offline
+ 
+COPY src ./src
+ 
+CMD ["./mvnw", "spring-boot:run"]
