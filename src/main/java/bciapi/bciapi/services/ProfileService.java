@@ -39,15 +39,21 @@ public class ProfileService implements IProfileService {
     }
 
     @Override
-    public Profile updateProfile(Profile profile) throws Exception {
+    public Profile updateProfile(int id, byte[] modelData) throws Exception {
         try {
-            Optional<Profile> existingProfile = this.profileRepository.findById(profile.getId());
+            Optional<Profile> existingProfile = this.profileRepository.findById((long) id);
 
             if (existingProfile.isEmpty()) {
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Profile Not Found");
             }
 
-            return this.profileRepository.save(profile);
+            Profile presentProfile = existingProfile.get();
+            presentProfile.setModelData(modelData);
+
+            return this.profileRepository.save(presentProfile);
+        } catch (ResponseStatusException e) {
+            log.error(e.getMessage());
+            throw e;
         } catch (Exception e) {
             log.error(e.getMessage());
             throw new Exception(e.getMessage());
@@ -63,6 +69,7 @@ public class ProfileService implements IProfileService {
                 throw new ResponseStatusException(HttpStatus.CONFLICT, "Profile Already Exists");
             }
 
+            profile.setId(null);
             return this.profileRepository.save(profile);
         } catch (Exception e) {
             log.error(e.getMessage());

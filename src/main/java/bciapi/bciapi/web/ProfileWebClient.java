@@ -9,9 +9,11 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.query.criteria.JpaRoot;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
@@ -72,9 +74,10 @@ public class ProfileWebClient {
                     content = @Content
             )
     })
-    public ResponseEntity<?> UpdateProfile(Profile profile) {
+    public ResponseEntity<?> updateProfile(@RequestParam int id,
+                                           @RequestParam("modelData") MultipartFile modelData) {
         try {
-            return ResponseEntity.ok(this.profileService.updateProfile(profile));
+            return ResponseEntity.ok(this.profileService.updateProfile(id, modelData.getBytes()));
         } catch (ResponseStatusException customException) {
             if (customException.getStatusCode() == HttpStatus.NOT_FOUND) {
                 return ResponseEntity.notFound().build();
@@ -84,6 +87,7 @@ public class ProfileWebClient {
             return ResponseEntity.badRequest().build();
         }
     }
+
 
     @PostMapping("/create")
     @Operation(summary = "Creates a profile.")
@@ -104,14 +108,17 @@ public class ProfileWebClient {
                     content = @Content
             )
     })
-    public ResponseEntity<?> CreateProfile(Profile profile) {
+    public ResponseEntity<?> createProfile(
+            @RequestParam("name") String name,
+            @RequestParam("modelData") MultipartFile modelData) {
+
+        Profile profile = new Profile();
+        profile.setId((long) -1);
+        profile.setName(name);
+
         try {
+            profile.setModelData(modelData.getBytes());
             return ResponseEntity.ok(this.profileService.createProfile(profile));
-        } catch (ResponseStatusException customeException) {
-            if (customeException.getStatusCode() == HttpStatus.CONFLICT) {
-                return ResponseEntity.status(HttpStatus.CONFLICT).build();
-            }
-            return ResponseEntity.badRequest().build();
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
