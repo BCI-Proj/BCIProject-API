@@ -16,11 +16,11 @@ public interface IProfileService {
 
     /**
      * Updates a profile.
-     * @param profile The profile to update.
+     * @param id The profile to update.
      * @return The updated profile.
      * @throws HttpClientErrorException.NotFound Thrown when profile not found based on ID.
      */
-    Profile updateProfile(Profile profile) throws Exception;
+    Profile updateProfile(int id, byte[] modelData) throws Exception;
 
     /**
      * Creates a profile.
