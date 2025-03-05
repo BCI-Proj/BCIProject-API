@@ -40,7 +40,7 @@ public class OpenAPIConfig {
     @Bean
     public OpenAPI openAPI() {
         return new OpenAPI()
-                .addServersItem(new Server().url("http://localhost:8080"))
+                .addServersItem(new Server().url("https://bciproject-api.onrender.com"))
                 .info(new Info()
                         .title("BCI API")
                         .description("RESTFUL API for BCI Project.")

@@ -4,6 +4,8 @@ import bciapi.bciapi.models.entities.Profile;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 /**
  * @author Raphael Paquin
  * @version 01
@@ -13,4 +15,6 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface ProfileRepository extends JpaRepository<Profile, Long> {
+    Optional<Profile> findProfileByName(String name);
+    Optional<Profile> updateProfileByName(String name);
 }
