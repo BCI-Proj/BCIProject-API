@@ -16,11 +16,20 @@ public interface IProfileService {
 
     /**
      * Updates a profile.
-     * @param profile The profile to update.
+     * @param profileName The profile's name.
+     * @param modelData The profile's model data.
+     * @param icaModelData The profile's ICA model data.
      * @return The updated profile.
      * @throws HttpClientErrorException.NotFound Thrown when profile not found based on ID.
      */
-    Profile updateProfile(Profile profile) throws Exception;
+    public Profile updateProfile(String profileName, byte[] modelData, byte[] icaModelData) throws Exception;
+
+    /**
+     * Get profile by name.
+     * @return The profile.
+     * @throws Exception General Exception.
+     */
+    Profile getProfileByName(String profileName) throws Exception;
 
     /**
      * Creates a profile.

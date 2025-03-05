@@ -1,8 +1,8 @@
 package bciapi.bciapi.models.entities;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.*;
-
 import java.io.Serializable;
 
 @Data
@@ -20,5 +20,10 @@ public class Profile implements Serializable {
     private String name;
     @Lob
     @Column(name = "model_data", columnDefinition = "BLOB")
+    @Schema(description = "The model data file", type = "string", format = "binary")
     private byte[] modelData;
+    @Lob
+    @Column(name = "ica_model_data", columnDefinition = "BLOB")
+    @Schema(description = "The model data file", type = "string", format = "binary")
+    private byte[] icaModelData;
 }

@@ -1,11 +1,16 @@
 package bciapi.bciapi.configs;
 
+import io.swagger.v3.core.converter.AnnotatedType;
+import io.swagger.v3.core.converter.ModelConverters;
+import io.swagger.v3.core.converter.ResolvedSchema;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.models.servers.Server;
+import org.springdoc.core.customizers.OpenApiCustomizer;
 import org.springframework.context.annotation.Configuration;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import org.springframework.context.annotation.Bean;
+import org.springframework.web.ErrorResponse;
 
 /**
  * @author Raph
@@ -24,13 +29,18 @@ import org.springframework.context.annotation.Bean;
 @Configuration
 public class OpenAPIConfig {
 
-    private String serverIp = "localhost";
-    private String backendPort = "8080";
+    @Bean
+    public OpenApiCustomizer schemaCustomizer() {
+        ResolvedSchema resolvedSchema = ModelConverters.getInstance()
+                .resolveAsResolvedSchema(new AnnotatedType(ErrorResponse.class));
+        return openApi -> openApi
+                .schema(resolvedSchema.schema.getName(), resolvedSchema.schema);
+    }
 
     @Bean
     public OpenAPI openAPI() {
         return new OpenAPI()
-                .addServersItem(new Server().url("http://" + serverIp + ":" + backendPort))
+                .addServersItem(new Server().url("https://bciproject-api.onrender.com"))
                 .info(new Info()
                         .title("BCI API")
                         .description("RESTFUL API for BCI Project.")
