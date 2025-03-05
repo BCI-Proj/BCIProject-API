@@ -22,4 +22,8 @@ public class Profile implements Serializable {
     @Column(name = "model_data", columnDefinition = "BLOB")
     @Schema(description = "The model data file", type = "string", format = "binary")
     private byte[] modelData;
+    @Lob
+    @Column(name = "ica_model_data", columnDefinition = "BLOB")
+    @Schema(description = "The model data file", type = "string", format = "binary")
+    private byte[] icaModelData;
 }
